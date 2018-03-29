@@ -1,4 +1,7 @@
 from logistic_regression import logistic_regression
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 
 
 def get_data(filename):
@@ -72,34 +75,34 @@ def print_confusion_matrix(labels, hypotheses):
         if l == 1 and h == 1:
             tp += 1.0
         elif l == 1 and h == 0:
-            tp += 1.0
+            fn += 1.0
         elif l == 0 and h == 0:
             tn += 1.0
         else:
-            fn += 1
-    print '-----------------------------'
-    print '\tConfusion Matrix'
-    print '-----------------------------'
-    print '\t\tPredicted'
-    print '\tActual\tNO\tYES'
-    print '-----------------------------'
-    print '\tNO\t', tn, '\t', fp
-    print '-----------------------------'
-    print '\tYES\t', fn, '\t', tp
-    print '-----------------------------'
+            fp += 1
+    print('-----------------------------')
+    print('\tConfusion Matrix')
+    print('-----------------------------')
+    print('\t\tPredicted')
+    print('\tActual\tNO\tYES')
+    print('-----------------------------')
+    print('\tNO\t', tn, '\t', fp)
+    print('-----------------------------')
+    print('\tYES\t', fn, '\t', tp)
+    print('-----------------------------')
 
     
 X, Y = get_data('testSet.txt')
 
-clf = logistic_regression(5000)
+clf = logistic_regression(500)
 w = clf.fit(X, Y)
-print 'Weights:', w
+print('Weights:', w)
 plot_fit(w, X, Y)
 
 verify_x, verify_y = get_data('verify.txt')
 hypotheses = clf.predict(verify_x)
 
-print 'Accuracy:', accuracy(verify_y, hypotheses)
+print('Accuracy:', accuracy(verify_y, hypotheses))
 
 print_confusion_matrix(verify_y, hypotheses)
 

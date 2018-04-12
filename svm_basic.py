@@ -1,12 +1,6 @@
 
 from classifier import classifier
 
-'''#######********************************
-Non-Kernel VErsions below
-#######********************************
-'''
-import numpy as np
-
 from numpy import mat, zeros, multiply, shape, nonzero, random
 
 
@@ -133,8 +127,6 @@ class svm_basic(classifier):
         return aj
 
     def __calcEkK(self, oS, k):
-        # intermediate = multiply(oS.alphas, oS.labelMat).T * (oS.X * oS.X[k, :].T)
-        # fXk = np.float64(intermediate) + oS.b
         fXk = float(multiply(oS.alphas, oS.labelMat).T * (oS.X * oS.X[k, :].T)) + oS.b
         Ek = fXk - float(oS.labelMat[k])
         return Ek

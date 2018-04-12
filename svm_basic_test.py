@@ -57,8 +57,10 @@ def plot_data(data_mat, labels, weights=None, b=None, plot_line=False, name='tmp
 if __name__ == '__main__':
     svm_classifier = svm_basic(maxIter=100)
     X, Y = get_data_and_labels('linearly_separable.csv')
-    plot_data(X, Y, name='')
+    plot_data(X, Y, name='Linearly Seperable Data')
+    print('Saving initial scatter plot of data as Linearly Seperable Data.png')
     weights, b = svm_classifier.fit(X, Y)
-    plot_data(X, Y, weights, b, plot_line=True)
+    plot_data(X, Y, weights, b, plot_line=True, name='Linearly Separated Data')
+    print('Saving final result as Linearly Separated Data.png')
 
 

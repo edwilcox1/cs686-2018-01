@@ -1,6 +1,8 @@
 from svm_basic import svm_basic
 import pandas as pd
 import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, confusion_matrix
 import matplotlib as mpl
 mpl.use('TkAgg')
 import matplotlib.pyplot as plt
@@ -59,8 +61,14 @@ if __name__ == '__main__':
     X, Y = get_data_and_labels('linearly_separable.csv')
     plot_data(X, Y, name='Linearly Seperable Data')
     print('Saving initial scatter plot of data as Linearly Seperable Data.png')
-    weights, b = svm_classifier.fit(X, Y)
+    print('Splitting data')
+    train_x, test_x, train_y, test_y = train_test_split(X, Y, test_size=0.2)
+    weights, b = svm_classifier.fit(train_x, train_y)
+    hyp = svm_classifier.predict(test_x)
+    print('Accuracy: {0:.4f}'.format(accuracy_score(test_y.values, hyp)))
+    print(confusion_matrix(test_y, hyp))
     plot_data(X, Y, weights, b, plot_line=True, name='Linearly Separated Data')
     print('Saving final result as Linearly Separated Data.png')
+
 
 

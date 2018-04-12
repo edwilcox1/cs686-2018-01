@@ -36,7 +36,14 @@ class svm_basic(classifier):
         return self.weights, self.b
 
     def predict(self, X):
-        return X * self.weights + self.b
+        hypotheses = []
+        hyp = mat(X) * self.weights + self.b
+        for h in hyp:
+            if h < 0:
+                hypotheses.append(-1)
+            else:
+                hypotheses.append(1)
+        return hypotheses
 
     def __calc_weights(self, x, y, b, alphas):
             y = y.T

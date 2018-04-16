@@ -1,9 +1,11 @@
 
-from ..classifier import classifier
+
+import numpy as np
+
+from classifier import classifier
+
 
 class Knn(classifier):
-    from scipy.spatial import distance, cKDTree
-    import numpy as np
 
     def __init__(self, k=3):
         self.X = None
@@ -14,42 +16,27 @@ class Knn(classifier):
     def fit(self, X, Y):
         self.X = X
         self.Y = Y
-        self.unique_classes = self.Y.unique()
+        self.unique_classes = np.unique(self.Y)
 
     def predict(self, X):
+        from scipy.spatial import distance
         if self.X is None or self.Y is None:
             print('No training data has been provided through fit()')
             return
 
         hypotheses = []
         for t in X:
-            points = self.__sort(self.__nearest_points(t))
-            neighbors = self.__get_top(self.k, points)
+            points = distance.cdist(np.array([t]), self.X)  # Need row t to be in 2d array for cdist
+            neighbors = np.argpartition(points, self.k)  # Returns indices of points
+            neighbors = neighbors[0, :self.k]
             hyp = self.__majority_class(neighbors)
             hypotheses.append(hyp)
         return hypotheses
 
-    def __sort(self, points):
-        pass
-
-    def __nearest_points(self, points):
-        """
-
-        :param points:
-        :return: Indices of nearest points
-        """
-        pass
-
-    def __get_top(self, k, points):
-        try:
-            return points[:k + 1]
-        except IndexError:
-            print('Invalid k provided: ' + k)
-            raise IndexError
-
     def __majority_class(self, neighbors):
+        import operator
         class_count = {class_name: 0 for class_name in self.unique_classes}
         for neighbor in neighbors:
             class_count[self.Y[neighbor]] += 1
 
-        return max
+        return max(class_count.items(), key=operator.itemgetter(1))[0]

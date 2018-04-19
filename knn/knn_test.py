@@ -6,11 +6,11 @@ from sklearn.metrics import accuracy_score
 from scipy.io.arff import loadarff
 
 
-def get_accuracy(k, train_x, train_y, test_x, test_y):
+def get_accuracy(k, trainx, trainy, testx, testy):
     knn = Knn(k)
-    knn.fit(train_x, train_y)
-    hyp = knn.predict(test_x)
-    return accuracy_score(hyp, test_y)
+    knn.fit(trainx, trainy)
+    hyp = knn.predict(testx)
+    return accuracy_score(hyp, testy)
 
 
 def extract_data(file):

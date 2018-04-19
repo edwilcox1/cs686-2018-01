@@ -26,12 +26,16 @@ class Knn(classifier):
 
         hypotheses = []
         for t in X:
-            points = distance.cdist(np.array([t]), self.X)  # Need row t to be in 2d array for cdist
-            neighbors = np.argpartition(points, self.k)  # Returns indices of points
-            neighbors = neighbors[0, :self.k]
+            distances = distance.cdist(np.array([t]), self.X)  # Need row t to be in 2d array for cdist
+            neighbors = np.argpartition(distances, self.k)  # Returns indices of points
+            neighbors = neighbors[0, :self.k]  # neighbors[0, :self.k]
             hyp = self.__majority_class(neighbors)
             hypotheses.append(hyp)
         return hypotheses
+
+    def __get_distances(self, point):
+        """Alternative function to cdist to check accuracy discrepancies"""
+        return [np.linalg.norm(point - x) for x in self.X]
 
     def __majority_class(self, neighbors):
         import operator
@@ -39,4 +43,12 @@ class Knn(classifier):
         for neighbor in neighbors:
             class_count[self.Y[neighbor]] += 1
 
-        return max(class_count.items(), key=operator.itemgetter(1))[0]
+        # Get majority class
+        max_class = None
+        max_count = 0
+        for key, val in class_count.items():
+            if val >= max_count:  # Taking last on tie
+                max_count = val
+                max_class = key
+
+        return max_class
